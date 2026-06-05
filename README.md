@@ -7,9 +7,10 @@ Parametric 3D-printable designs written in OpenSCAD.
 ### Paper-pocket roulette wheel (`roulette.scad`)
 
 A 150 mm spinning wheel with 12 deep circular pockets sized to hold folded
-paper notes. Raised separator walls divide the sectors, the center is
-recessed to save material, and a pyramidal pointer slots into the base.
-Designed to spin on an M5 screw rather than a printed axle.
+paper notes. Raised separator walls divide the sectors, the center is a
+shallow decorative bowl with a knurled hex-keyed knob you grip to spin the
+wheel, and a tall pyramidal pointer slots into the base. Designed to spin
+on an M5 screw rather than a printed axle.
 
 #### Bill of materials
 
@@ -26,6 +27,7 @@ Open `roulette.scad` in OpenSCAD, set the `part` variable, press F6, then export
 | `wheel`   | Pocket-side up, 0.2 mm layers, 15–20% infill. ~28 mm tall.     |
 | `base`    | Counterbore side down — screw-head recess prints cleanly.      |
 | `pointer` | Foot down, tip up. Tapered pyramid; no supports needed.        |
+| `knob`    | Peg down (small footprint). 0.2 mm layers, 25% infill.         |
 
 Leave `part = "all"` for an exploded preview of every component.
 
@@ -39,7 +41,9 @@ Leave `part = "all"` for an exploded preview of every component.
 5. Hold the wheel still and tighten the screw from below with an Allen key.
    The hex pocket grips the nut so it can't spin. Tighten until the wheel
    still spins freely without wobble.
-6. Press the pointer's tab into the slot near the rim of the base. Glue if
+6. Drop the **knob** into the central bowl — its hex peg drops into the
+   large hex socket above the nut. Optionally glue it in for permanence.
+7. Press the pointer's tab into the slot near the rim of the base. Glue if
    the fit is loose.
 
 #### Tuning
