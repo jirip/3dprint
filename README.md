@@ -14,8 +14,8 @@ Designed to spin on an M5 screw rather than a printed axle.
 #### Bill of materials
 
 - 1× M5×25 socket-head cap screw
-- 1× M5 nyloc nut
-- 2× M5 washers
+- 1× M5 nyloc nut (captured in a hex pocket on top of the wheel)
+- 1× M5 washer (between the base hub and the wheel — acts as a thrust bearing)
 
 #### Printed parts
 
@@ -32,11 +32,13 @@ Leave `part = "all"` for an exploded preview of every component.
 #### Assembly
 
 1. Drop the screw head into the counterbore on the **underside** of the base.
-2. Slide a washer onto the shaft above the base hub.
+2. Slide the washer onto the shaft above the base hub (acts as a thrust bearing).
 3. Drop the wheel on — the shaft passes through with running clearance.
-4. Second washer on top of the wheel.
-5. Thread the nyloc nut into the recess on top. Tighten until the wheel spins
-   freely without wobble.
+4. Drop the nyloc nut into the **hex pocket** on top of the wheel. It can only
+   sit one way (six orientations); rotate until it drops flush.
+5. Hold the wheel still and tighten the screw from below with an Allen key.
+   The hex pocket grips the nut so it can't spin. Tighten until the wheel
+   still spins freely without wobble.
 6. Press the pointer's tab into the slot near the rim of the base. Glue if
    the fit is loose.
 

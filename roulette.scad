@@ -1,5 +1,5 @@
 // Parametric paper-pocket roulette wheel.
-// Hardware: M5x25 socket-head cap screw + M5 nyloc nut + 2x M5 washers.
+// Hardware: M5x25 socket-head cap screw + M5 nyloc nut + 1x M5 washer.
 // Render each part by setting `part` below, then F6 and export STL.
 
 part = "all";   // "wheel" | "base" | "pointer" | "all"
@@ -20,17 +20,17 @@ center_relief_h  = 6;    // depth of top recess
 // ---------- Base ----------
 base_dia         = 170;
 base_thickness   = 8;    // thicker to host counterbore + nut pocket clearance
-washer_gap       = 1.2;  // raised hub height — wheel rides on washer, not base
+washer_gap       = 1.2;  // raised hub height — washer sits on hub, wheel rides on washer
 
-// ---------- Hardware (M5x25) ----------
+// ---------- Hardware (M5x25 socket-head cap screw) ----------
+// Head is ROUND (cylindrical) — hex socket cut into its top for an Allen key.
+// Nut is HEX across-flats — gets a hex pocket so it can't spin while tightening.
 screw_shaft_d    = 5.0;
 screw_clearance  = 0.4;  // running fit through the wheel
-screw_head_d     = 8.8;  // socket-head cap diameter (typ. 8.5, +tolerance)
-screw_head_h     = 5.0;  // head height (typ. 5.0)
+screw_head_d     = 8.5;  // socket-head cap diameter (round)
+screw_head_h     = 5.0;  // head height
 nut_af           = 8.0;  // M5 hex nut across-flats
 nut_h            = 5.0;  // nyloc nut height incl. nylon insert
-washer_od        = 10.0;
-washer_th        = 1.0;
 
 // ---------- Pointer ----------
 // Pyramidal arrow: wide rectangular foot tapering up to a thin tip.
@@ -50,7 +50,6 @@ $fn              = 128;
 
 // ---------- Derived ----------
 pocket_ring_r    = (wheel_dia/2) - rim_width - pocket_dia/2;
-nut_pocket_d     = nut_af / cos(30) + 0.4;
 wheel_hole_d     = screw_shaft_d + screw_clearance;
 
 // Pointer slot center: in the base overhang ring, between wheel edge and base edge.
@@ -94,11 +93,17 @@ module wheel() {
             cylinder(d = wheel_hole_d,
                      h = wheel_thickness + sep_wall_h + 0.2);
 
-        // nut + washer recess on top (sits inside the central relief)
-        recess_d = max(washer_od, nut_pocket_d) + 1.0;
-        recess_h = washer_th + nut_h + 0.5;
-        translate([0, 0, wheel_thickness - recess_h])
-            cylinder(d = recess_d, h = recess_h + sep_wall_h + 0.1);
+        // Hex pocket on top of the wheel — captures the nyloc nut so it can't spin
+        // while tightening the screw from below with the Allen key. The washer
+        // is omitted on top (one washer below the wheel is enough as a thrust
+        // surface against the base hub); the nut bears directly on the wheel.
+        nut_pocket_af = nut_af + 0.3;          // across-flats + clearance
+        nut_recess_h  = nut_h + 0.4;
+        translate([0, 0, wheel_thickness - nut_recess_h])
+            rotate([0, 0, 30])                 // flat-top orientation
+                cylinder(d = nut_pocket_af / cos(30),
+                         h = nut_recess_h + sep_wall_h + 0.1,
+                         $fn = 6);
     }
 }
 
@@ -107,7 +112,7 @@ module base() {
     difference() {
         union() {
             cylinder(d = base_dia, h = base_thickness);
-            // raised central hub — wheel's bottom washer rides on this
+            // raised central hub — the washer sits on this; wheel rides on the washer
             translate([0, 0, base_thickness])
                 cylinder(d = hub_dia, h = washer_gap);
         }
@@ -117,9 +122,11 @@ module base() {
             cylinder(d = screw_shaft_d + 0.3,
                      h = base_thickness + washer_gap + 0.2);
 
-        // counterbore on the underside for the socket head
+        // Round counterbore on the underside for the socket-head cap screw.
+        // The head is held by the Allen key while you tighten the nut from above —
+        // no rotational capture needed here.
         translate([0, 0, -0.1])
-            cylinder(d = screw_head_d + 0.4, h = screw_head_h + 0.2);
+            cylinder(d = screw_head_d + 0.4, h = screw_head_h + 0.3);
 
         // pointer mounting slot — rectangular press-fit pocket in the base overhang.
         // Slot is 2 * pointer_tab_interference SMALLER than the tab on each axis,
