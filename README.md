@@ -6,7 +6,9 @@ Parametric 3D-printable designs written in OpenSCAD.
 
 ### Paper-pocket roulette wheel (`roulette.scad`)
 
-A 150 mm spinning wheel with 12 circular pockets sized to hold folded paper notes.
+A 150 mm spinning wheel with 12 deep circular pockets sized to hold folded
+paper notes. Raised separator walls divide the sectors, the center is
+recessed to save material, and a pyramidal pointer slots into the base.
 Designed to spin on an M5 screw rather than a printed axle.
 
 #### Bill of materials
@@ -19,11 +21,11 @@ Designed to spin on an M5 screw rather than a printed axle.
 
 Open `roulette.scad` in OpenSCAD, set the `part` variable, press F6, then export STL.
 
-| Part      | Notes                                                      |
-| --------- | ---------------------------------------------------------- |
-| `wheel`   | Flat side down, 0.2 mm layers, 20% infill.                 |
-| `base`    | Counterbore side down — screw-head recess prints cleanly.  |
-| `pointer` | Flat side down, no supports.                               |
+| Part      | Notes                                                          |
+| --------- | -------------------------------------------------------------- |
+| `wheel`   | Pocket-side up, 0.2 mm layers, 15–20% infill. ~28 mm tall.     |
+| `base`    | Counterbore side down — screw-head recess prints cleanly.      |
+| `pointer` | Foot down, tip up. Tapered pyramid; no supports needed.        |
 
 Leave `part = "all"` for an exploded preview of every component.
 
@@ -35,6 +37,8 @@ Leave `part = "all"` for an exploded preview of every component.
 4. Second washer on top of the wheel.
 5. Thread the nyloc nut into the recess on top. Tighten until the wheel spins
    freely without wobble.
+6. Press the pointer's tab into the slot near the rim of the base. Glue if
+   the fit is loose.
 
 #### Tuning
 
