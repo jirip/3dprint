@@ -36,14 +36,15 @@ washer_th        = 1.0;
 // Pyramidal arrow: wide rectangular foot tapering up to a thin tip.
 // Slot-mounts into the base near the rim, pointing inward.
 pointer_foot_w   = 22;   // foot width (tangential to wheel)
-pointer_foot_l   = 16;   // foot length (radial)
+pointer_foot_l   = 9;    // foot length (radial) — must fit in base overhang ring (10 mm)
 pointer_height   = 30;   // total height above base
 pointer_tip_w    = 3;    // top tip width
 pointer_tip_l    = 3;    // top tip length
 pointer_tab_w    = 10;   // mounting tab width
 pointer_tab_l    = 6;    // mounting tab length (radial)
 pointer_tab_h    = 5;    // tab depth into base slot
-pointer_radial_offset = 4;  // mm inward from wheel edge for the tip
+pointer_tab_interference = 0.15;  // tab is this much LARGER than slot per axis -> press fit
+pointer_radial_offset = 1;  // tip shift toward wheel center, in mm (must be < pointer_foot_l/2 - pointer_tip_l/2)
 
 $fn              = 128;
 
@@ -52,8 +53,11 @@ pocket_ring_r    = (wheel_dia/2) - rim_width - pocket_dia/2;
 nut_pocket_d     = nut_af / cos(30) + 0.4;
 wheel_hole_d     = screw_shaft_d + screw_clearance;
 
-// Pointer slot center: just outside the wheel's outer edge
-pointer_slot_r   = wheel_dia/2 + pointer_foot_l/2 + 2;
+// Pointer slot center: in the base overhang ring, between wheel edge and base edge.
+// Wheel rim = 75, base rim = 85, overhang ring is 10 mm wide.
+// Place slot at radius 80 — keeps ~2 mm of base material on the outside of the slot
+// and the inner edge of the foot sits just outside the wheel rim.
+pointer_slot_r   = (wheel_dia/2 + base_dia/2) / 2;   // = 80 mm
 
 // ---------- Wheel ----------
 module wheel() {
@@ -117,9 +121,13 @@ module base() {
         translate([0, 0, -0.1])
             cylinder(d = screw_head_d + 0.4, h = screw_head_h + 0.2);
 
-        // pointer mounting slot — rectangular, near the rim
+        // pointer mounting slot — rectangular press-fit pocket in the base overhang.
+        // Slot is 2 * pointer_tab_interference SMALLER than the tab on each axis,
+        // so the tab compresses into the slot for a true interference fit.
         translate([pointer_slot_r, 0, base_thickness - pointer_tab_h])
-            cube([pointer_tab_l + 0.4, pointer_tab_w + 0.4, pointer_tab_h + 0.1],
+            cube([pointer_tab_l - 2 * pointer_tab_interference,
+                  pointer_tab_w - 2 * pointer_tab_interference,
+                  pointer_tab_h + 0.1],
                  center = true);
     }
 }
