@@ -4,6 +4,48 @@ Parametric 3D-printable designs written in OpenSCAD.
 
 ## Projects
 
+### Hose-end watering spike (`hose_spike.scad`)
+
+A 140 mm tall watering spike that plugs into the end of a 10 mm ID hose and
+sticks into a plant's soil. A tapered internal bore feeds 24 small side holes
+distributed between 45–85 mm depth so water is released at root level rather
+than running off the surface.
+
+#### What you need
+
+- 10 mm ID flexible hose
+- Print with a brim (5–8 mm) for bed adhesion — the bottom contact patch is
+  small. No supports.
+
+#### Print settings
+
+| Setting | Value |
+| ------- | ----- |
+| Orientation | Barb end down, tip up |
+| Layer height | 0.2 mm |
+| Infill | 30% (water pressure isn't high but layer adhesion matters for the bore) |
+| Walls | 3 perimeters (the cone walls are thin near the tip — extra perimeters help) |
+| Brim | 5–8 mm |
+| Supports | None |
+
+#### Assembly
+
+Push the barbed end into the hose until the wider collar stops it. No clamp
+needed for low-pressure drip irrigation; add a hose clamp for higher pressure.
+
+Push the cone tip into the soil. The hose is on top, the holes deliver water
+to the root zone underground.
+
+#### Tuning
+
+- **Hose ID different from 10 mm:** adjust `barb_neck_od` (~hose ID − 0.6) and
+  `barb_od` (~hose ID + 1.2).
+- **Want more / fewer holes:** change `hole_rows` and `hole_per_row`.
+- **Want a shorter spike:** reduce `cone_length` AND `hole_deepest_z` (the
+  deepest hole row must stay below `bore_top_z`).
+
+---
+
 ### Paper-pocket roulette wheel (`roulette.scad`)
 
 A 150 mm spinning wheel with 12 deep circular pockets sized to hold folded
