@@ -2,11 +2,16 @@
 // Pointy cone goes into the soil; many small side holes release water at root level.
 // A barbed adapter at the top slides INTO the hose and grips it via ridges.
 //
-// Print orientation: barb end DOWN, tip UP — barbs are all sloped surfaces,
-// no overhangs to worry about. BUT the bottom contact patch is only a thin
-// ring (~7.9 mm OD with the bore opening in its center), so a brim is mandatory
-// for bed adhesion on a 200 mm tall print. Use 5–8 mm brim in your slicer.
-// No supports needed.
+// Print orientation: barb end DOWN, tip UP. No supports needed:
+//   - Barb ridges: ~27 deg from vertical, well within FDM's overhang envelope.
+//   - Barb-to-collar transition: sloped (~38 deg from vertical) so the collar
+//     doesn't sit on a horizontal step over the barb neck.
+//   - Cone: tapers inward going up, no overhang.
+//   - Side holes (2 mm): tiny internal bridges, print cleanly.
+//
+// BUT the bottom contact patch is only a thin ring (~7.9 mm OD with the bore
+// opening in its center), so a brim (5-8 mm) is mandatory for bed adhesion on
+// this 140 mm tall print.
 
 // ---------- Hose / adapter ----------
 hose_id          = 10.0;   // hose inner diameter
@@ -16,6 +21,7 @@ barb_neck_od     = 9.4;    // smaller diameter between barbs (slips into hose)
 barb_ring_h      = 1.8;    // height of each barb ridge
 barb_pitch       = 4.5;    // distance between consecutive barb ring tops
 adapter_lead_h   = 3.0;    // short smooth lead-in before the first barb
+adapter_taper_h  = 3.0;    // sloped transition from last barb neck up to the collar — keeps the overhang printable without supports (max ~38 deg from vertical)
 adapter_collar_h = 4.0;    // wider collar at the top of the adapter (hose stop)
 adapter_collar_od = 14.0;  // collar OD — wider than hose ID so hose can't slide up
 adapter_bore_d   = 4.5;    // water channel through the adapter — narrower than barbs to keep walls thick
@@ -44,7 +50,8 @@ hole_deepest_z      = 85.0;    // depth of the last/deepest row (must be < bore_
 $fn              = 96;
 
 // ---------- Derived ----------
-adapter_total_h  = adapter_lead_h + barb_count * barb_pitch + adapter_collar_h;
+barb_stack_h     = adapter_lead_h + barb_count * barb_pitch;
+adapter_total_h  = barb_stack_h + adapter_taper_h + adapter_collar_h;
 
 // ---------- Modules ----------
 
@@ -101,21 +108,27 @@ module spike_cone() {
     }
 }
 
-// Full assembly: barbed insert (bottom) -> collar -> cone (top)
+// Full assembly: barbed insert -> sloped taper -> collar -> cone (bottom to top)
 module spike() {
     // Barbed insert (bottom of print — small footprint, prints first)
     barbed_insert();
 
-    // Collar (hose stop) above the barbs
-    translate([0, 0, adapter_lead_h + barb_count * barb_pitch])
+    // Sloped taper from the last barb's neck (9.4 mm) up to the collar (14 mm).
+    // 2.3 mm of radial growth over 3 mm of height = ~38 deg from vertical,
+    // safely within FDM's no-support envelope. Replaces what would otherwise be
+    // a horizontal collar-on-neck overhang.
+    translate([0, 0, barb_stack_h])
+        cylinder(d1 = barb_neck_od,
+                 d2 = adapter_collar_od,
+                 h = adapter_taper_h);
+
+    // Collar (hose stop) above the taper
+    translate([0, 0, barb_stack_h + adapter_taper_h])
         cylinder(d = adapter_collar_od, h = adapter_collar_h);
 
     // Cone above the collar
     translate([0, 0, adapter_total_h])
         spike_cone();
-
-    // Drill the through-channel from the adapter base up through to meet the bore.
-    // (We do this as a difference on the whole thing in the final assembly.)
 }
 
 // Final part: spike + internal channel from the very bottom to the cone bore.

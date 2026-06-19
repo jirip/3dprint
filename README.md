@@ -6,10 +6,11 @@ Parametric 3D-printable designs written in OpenSCAD.
 
 ### Hose-end watering spike (`hose_spike.scad`)
 
-A 140 mm tall watering spike that plugs into the end of a 10 mm ID hose and
+A 144 mm tall watering spike that plugs into the end of a 10 mm ID hose and
 sticks into a plant's soil. A tapered internal bore feeds 24 small side holes
 distributed between 45–85 mm depth so water is released at root level rather
-than running off the surface.
+than running off the surface. Prints without supports (all overhangs ≤ 38°
+from vertical).
 
 #### What you need
 
